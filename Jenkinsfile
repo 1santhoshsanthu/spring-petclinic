@@ -23,12 +23,11 @@ pipeline{
         }
     }
  }
-    post {
-        always {
+         post {
+           always {
             archiveArtifacts artifacts: '**/*.jar'
             junit '**/surefire-reports/*.xml'
         }
     }
 }
 }
-
