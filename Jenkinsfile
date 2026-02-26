@@ -4,11 +4,6 @@ pipeline {
     triggers {
         pollSCM('H/5 * * * *')   // better than every minute
     }
-
-    tools {
-        maven 'Maven-3'   // configure in Global Tool Configuration
-    }
-
     stages {
 
         stage('Git Checkout') {
