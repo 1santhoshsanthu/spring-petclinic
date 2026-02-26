@@ -1,5 +1,8 @@
 pipeline{
     agent {label 'SPC'}
+    triggers {
+        pollSCM('* * * * *')
+    }
     stages{
         stage('git checkout'){
             steps{
@@ -9,8 +12,23 @@ pipeline{
         }
         stage('build and scan'){
             steps{
-                sh 'mvn package sonar:sonar'
+                withCredentials([string(credentialsId: 'SONAR', variable: 'SONAR_TOKEN')]) {
+                withSonarQubeEnv('SONAR') {
+                sh """mvn package sonar:sonar \
+                -Dsonar.projectKey=1santhoshsanthu \
+                -Dsonar.organisation=1santhoshsanthu \
+                -Dsonar.host.url=https://sonarcloud.io \
+                -Dsonar.login=$SONAR_TOKEN"""
             }
         }
     }
+ }
+    post {
+        always {
+            archiveArtifacts artifacts: '**/*.jar'
+            junit '**/surefire-reports/*.xml'
+        }
+    }
 }
+}
+
