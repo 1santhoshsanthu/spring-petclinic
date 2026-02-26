@@ -1,33 +1,44 @@
-pipeline{
-    agent {label 'SPC'}
+pipeline {
+    agent { label 'SPC' }
+
     triggers {
-        pollSCM('* * * * *')
+        pollSCM('H/5 * * * *')   // better than every minute
     }
-    stages{
-        stage('git checkout'){
-            steps{
+
+    tools {
+        maven 'Maven-3'   // configure in Global Tool Configuration
+    }
+
+    stages {
+
+        stage('Git Checkout') {
+            steps {
                 git url: 'https://github.com/spring-projects/spring-petclinic.git',
-                  branch: 'main'
+                    branch: 'main'
             }
         }
-        stage('build and scan'){
-            steps{
+
+        stage('Build & Sonar Scan') {
+            steps {
                 withCredentials([string(credentialsId: 'SONAR', variable: 'SONAR_TOKEN')]) {
-                withSonarQubeEnv('SONAR') {
-                sh """mvn package sonar:sonar \
-                -Dsonar.projectKey=1santhoshsanthu \
-                -Dsonar.organisation=1santhoshsanthu \
-                -Dsonar.host.url=https://sonarcloud.io \
-                -Dsonar.login=$SONAR_TOKEN"""
+                    withSonarQubeEnv('SONAR') {
+                        sh """
+                        mvn clean package sonar:sonar \
+                        -Dsonar.projectKey=1santhoshsanthu \
+                        -Dsonar.organization=1santhoshsanthu \
+                        -Dsonar.host.url=https://sonarcloud.io \
+                        -Dsonar.login=$SONAR_TOKEN
+                        """
+                    }
+                }
             }
         }
     }
- }
-         post {
-           always {
-            archiveArtifacts artifacts: '**/*.jar'
-            junit '**/surefire-reports/*.xml'
+
+    post {
+        always {
+            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            junit '**/target/surefire-reports/*.xml'
         }
     }
-}
 }
