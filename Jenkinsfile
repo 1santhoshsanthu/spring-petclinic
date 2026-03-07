@@ -24,4 +24,17 @@ pipeline {
             }
         }
     }
+    post{
+        always{
+            archieveartifacts Artifacts: "**/target/*.jar",
+            archieveartifacts Artifacts: "target/surefire-reports/*.xml",
+            junit: "**/target/surefire-reports/*.xml"
+        }
+        success {
+            echo "pipeline executed"
+        }
+        failure {
+            echo "pipeline failed"
+        }
+    }
 }
