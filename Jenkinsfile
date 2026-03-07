@@ -11,14 +11,16 @@ pipeline {
             }
         }
         stage ("scan - sonar") {
-            withcredentails([string(credentailsId:'SONAR_ID', variable:'SONAR_TOKEN')]){
-            withSonarQubeEnv('SONAR'){
-                sh """mvn packege sonar:sonar \
-                    -Dsonar.projectKey=1santhoshsanthu_spring-petclinic \
-                    -Dsonar.organization=1santhoshsanthu \
-                    -Dsonar.host.url=https://sonarcloud.io/ \
-                    -Dsonar.login=$SONAR_TOKEN"""
-            }
+            steps {
+                withcredentails([string(credentailsId:'SONAR_ID', variable:'SONAR_TOKEN')]){
+                withSonarQubeEnv('SONAR'){
+                    sh """mvn packege sonar:sonar \
+                        -Dsonar.projectKey=1santhoshsanthu_spring-petclinic \
+                        -Dsonar.organization=1santhoshsanthu \
+                        -Dsonar.host.url=https://sonarcloud.io/ \
+                        -Dsonar.login=$SONAR_TOKEN"""
+                }
+                }
             }
         }
     }
