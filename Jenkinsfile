@@ -26,8 +26,8 @@ pipeline {
     }
     post{
         always{
-            archieveartifacts Artifacts: "**/target/*.jar",
-            archieveartifacts Artifacts: "target/surefire-reports/*.xml",
+            archieveArtifacts artifacts: "**/target/*.jar",
+            archieveArtifacts artifacts: "target/surefire-reports/*.xml",
             junit: "**/target/surefire-reports/*.xml"
         }
         success {
