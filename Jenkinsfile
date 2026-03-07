@@ -12,7 +12,7 @@ pipeline {
         }
         stage ("scan - sonar") {
             steps {
-                withcredentails([string(credentailsId:'SONAR_ID', variable:'SONAR_TOKEN')]){
+                withCredentails([string(credentailsId:'SONAR_ID', variable:'SONAR_TOKEN')]){
                 withSonarQubeEnv('SONAR'){
                     sh """mvn packege sonar:sonar \
                         -Dsonar.projectKey=1santhoshsanthu_spring-petclinic \
