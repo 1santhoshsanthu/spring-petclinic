@@ -25,9 +25,9 @@ pipeline {
         }
     }
     post{
-        always{
-            archieveArtifacts artifacts: "**/target/*.jar",fingerprint:true
-            archieveArtifacts artifacts: "target/surefire-reports/*.xml"
+         always{
+            archiveArtifacts artifacts: "**/target/*.jar",
+            archiveArtifacts artifacts: "target/surefire-reports/*.xml",
             junit "**/target/surefire-reports/*.xml"
         }
         success {
