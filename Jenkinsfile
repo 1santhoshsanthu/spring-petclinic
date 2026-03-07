@@ -13,11 +13,11 @@ pipeline {
         stage ("scan - sonar") {
             steps {
                 withCredentials([string(credentialsId:'SONAR_ID', variable:'SONAR_TOKEN')]){
-                withSonarQubeEnv('SONAR'){
+                withSonarQubeEnv('sonar_id'){
                     sh """mvn package sonar:sonar \
                         -Dsonar.projectKey=1santhoshsanthu_spring-petclinic \
                         -Dsonar.organization=1santhoshsanthu \
-                        -Dsonar.host.url=https://sonarcloud.io \
+                        -Dsonar.host.url=https://sonarcloud.io/ \
                         -Dsonar.login=$SONAR_TOKEN"""
                 }
                 }
